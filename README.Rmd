@@ -32,7 +32,7 @@ You can install the `dyntaxa` R package from [GitHub](https://github.com/bioatla
 
 ``` r
 library(devtools)
-install_github("bioatlas/dyntaxa")
+install_github("bioatlas/dyntaxa", build_opts = c("--no-resave-data", "--no-manual"))
 ```
 
 ## Example usage
