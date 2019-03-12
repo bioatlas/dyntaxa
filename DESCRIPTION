@@ -1,0 +1,36 @@
+Package: dyntaxa
+Title: Dyntaxa - Swedish Taxonomic Database Of Organisms in Sweden
+Version: 0.1
+Authors@R: 
+    person(given = "Markus",
+           family = "Skyttner",
+           role = c("aut", "cre"),
+           email = "markus.skyttner@nrm.se")
+Description: Dyntaxa contains information about 61,500 species occurring in Sweden. 
+  This includes about 95% of known multicellular species – remaining gaps mainly found among the fungi. 
+  The scope of organisms include multicellular species documented in Sweden and such unicellular species that are included in environmental monitoring by the Swedish EPA. 
+  In addition to these species there are many names at other taxonomic levels, scientific synonyms, Swedish vernaculars. 
+License: AGPL-3 | file LICENSE
+URL: http://github.com/bioatlas/dyntaxa
+BugReports: https://github.com/bioatlas/dyntaxa/issues
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 6.1.0
+Depends: R (>= 3.3)
+Imports: 
+    dplyr,
+    tibble,
+    purrr,
+    utils,
+    readr,
+    xml2,
+    magrittr,
+    rappdirs,
+    DBI,
+    RSQLite,
+    igraph,
+    stringdist
+Suggests: 
+    knitr,
+    rmarkdown
+VignetteBuilder: knitr

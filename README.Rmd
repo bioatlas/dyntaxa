@@ -1,0 +1,113 @@
+---
+output: github_document
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "",
+  fig.path = "man/figures/README-",
+  out.width = "100%"
+)
+```
+# dyntaxa
+
+The goal of the `dyntaxa` R package is to provide a read-only R package to interface with Dyntaxa - the taxonomic database of organisms in Sweden. 
+
+Dyntaxa contains information about 61,500 species occurring in Sweden. This includes about 95% of known multicellular species – remaining gaps mainly found among the fungi. The scope of organisms include multicellular species documented in Sweden and such unicellular species that are included in environmental monitoring by the Swedish EPA. In addition to these species there are many names at other taxonomic levels, scientific synonyms, Swedish vernaculars. 
+
+## Credits and acknowledgements
+
+The Dyntaxa database is published by [Artdatabanken](https://www.gbif.org/publisher/b8323864-602a-4a7d-9127-bb903054e97d) at [GBIF.org](https://www.gbif.org/dataset/de8934f4-a136-481c-a87a-b0b202b80a31) by Johan Liljeblad. 
+
+## Citation to use for refering to Dyntaxa
+
+Liljeblad J (2019). Dyntaxa. Svensk taxonomisk databas. ArtDatabanken. Checklist dataset https://doi.org/10.15468/j43wfc. 
+
+## Installation
+
+You can install the `dyntaxa` R package from [GitHub](https://github.com/bioatlas/dyntaxa) with:
+
+``` r
+library(devtools)
+install_github("bioatlas/dyntaxa")
+```
+
+## Example usage
+
+This package can be used to automate the following tasks:
+
+- Taxonomic identifier from a taxonomic name and vice versa
+- Taxonomic name from a vernacular (common) name and vice versa
+- Taxonomic hierarchy/classification from identifier or name
+- Taxonomic children of an identifier or name
+- All taxa downstream to a certain rank from identifier or name
+- Taxonomic synonyms from identifier or name
+
+Here are some short and simple usage examples which shows you how to download and access data from Dyntaxa for those tasks. 
+
+```{r eval=TRUE}
+
+# we use dplyr for data manipulation (pipe, filtering etc)
+suppressPackageStartupMessages(library(dplyr))
+
+library(dyntaxa)
+
+# looking up identifiers/keys from taxon names and vice versa
+
+# taxonomic name from taxonomic identifier
+dyntaxa_name_from_id(5000001)
+
+# taxonomic identifier from taxonomic name
+key <- dyntaxa_id_from_name("Alces alces")
+key
+
+# the taxon key or identifier is often needed to retrieve taxonomic data
+
+# taxonomic hierarchy/classification from identifier or name
+dyntaxa_classification(key)
+
+# taxa downstream from identifier or name
+dyntaxa_downstream(dyntaxa_id_from_name("Cervidae"))
+
+# taxonomic immediate children of an identifier or name
+dyntaxa_children(dyntaxa_id_from_name("Carnivora"))
+
+# taxa downstream of a specific taxon identifier 
+# can be filtered at species level (or at other ranks)
+dyntaxa_downstream(dyntaxa_id_from_name("Carnivora")) %>% 
+  filter(taxonRank == "species")
+
+# search a fulltext index of Dyntaxa a vernacular name
+dyntaxa_search_all("blåklocka") %>% 
+  select(taxonId, scientificName, vernacularName, title, creator)
+
+# another example of a full text search 
+dyntaxa_search_all("Thomas Karlssons Kärlväxtlista") %>%
+  filter(taxonRank == "family")
+
+# what are synonyms for Sagedia zonata?
+dyntaxa_synonyms(dyntaxa_id_from_name("Sagedia zonata"))
+
+# more examples for synonyms
+dyntaxa_search_all("scientificName:Phyllachora graminis")
+dyntaxa_synonyms(dyntaxa_id_from_name("Phyllachora graminis"))
+
+# does "Citronfjäril" / "Gonepteryx rhamni" have synonyms?
+key <- dyntaxa_search_vernacular("citronfjäril")$taxonId
+dyntaxa_name_from_id(key)
+dyntaxa_synonyms(key)
+
+```
+
+## Other use cases
+
+The vignette provides more usage information on other common use cases, such as:
+
+- Using the above functions with vectors of several keys/identifiers or names
+- Resolving potentially misspelled scientific names 
+- Exporting data
+- Looking at counts / aggregates
+
